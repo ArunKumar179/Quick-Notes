@@ -1,0 +1,79 @@
+SQL structured query language - RDBMS MySQL , Oracle and postreSQL 
+
+database : collection of data in structured manner 
+
+DBMS : Managing that data or database by getting and inserting and updating data 
+Ex:Cassandra , hadoop and mangoDb 
+
+Server and client based 
+
+Grapical UI -by establishing the connection 
+
+Command line UI-in cmd prompt 
+
+Schemas > folder in database > collection of database 
+
+DDL : Data defination language: create, alter ,truncate ,drop 
+
+DML : Data manupulatioin lanaguage insert , delete , update 
+
+DRL :Data retrival lanaguage : select
+
+
+
+
+DCL: Data control language for admins to give permission  
+
+create database arun;
+drop database arun;
+create database if not exist arun;
+
+
+to create table 
+
+create table tata(slno int(1),name varchar(15), mileage(2))
+
+to insert values 
+
+insert into tata values (1,'punch',22)
+
+alias 
+
+i want to display different column name in output window 
+ex: select name n , slno id from tata;
+here n and id are alias like arun alias akb , arun alias viper 
+
+select name  model , mileage+4 improved_mileage from tata
+
+if we add int column while select it will add everywhere 
+
+we have only 3 data types > numeric > text> data and time 
+
+
+
+DRL 
+
+Arethemetic operater like > .=.,> like select * form employees where salary >200 and age<18 and vacations >= 13
+
+We have conditional operater/ logical operater AND OR NOT 
+
+Select * from employees where salary >2000 and age<18 
+for not we need to mention after where only 
+
+select * from employes where not salary is 2000  /// retrives all details where salary is other than 2000
+
+
+
+between and in between operator
+select name from tata where mileage  between 1 and 10
+
+select name from tata where mileage not between 1 and 10
+
+
+In and not in operater 
+rather than writing selecet * from tata where name ='punch' or name ='tiago' or name ='tigor'
+select * from tata where name in('punch','tiago','tigor')
+
+
+pattern matching operters : like when values are string  
+

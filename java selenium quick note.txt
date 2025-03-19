@@ -1,0 +1,833 @@
+Java selenium required packages :
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+Java selenium --
+
+locaters are used to locate web elements 
+and making action  on that web element 
+
+two types > Basic locaters like id, name , partiallibnktext and linktext , classname and tagname we can find it in html 
+using this we can locate 
+            customized locaters like css selectors and xpath
+
+default constructer opens chrome browser automatically when ChromeDriver object is created 
+like ChromeDriver c = new ChromeDriver();
+
+also we have c.get(link of web); to get link 
+c.getTitle() to get title of particular page , for each page we have diff tittle 
+
+c.manage().window().maximize(); // this maximize the screen 
+
+Thread.sleep(10000); // stops code for 10 secs 
+
+
+
+we can locate web elemets by c.findElemet(By.id/name/className/tagName("provide from html in the form of  String"))
+
+my first automation script :
+package js1;
+
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+
+
+
+public class Main {
+
+	public static void main(String[] args) {
+	
+	WebDriver d = new ChromeDriver();
+	d.get("https://www.amazon.com/");
+	d.manage().window().maximize();
+	
+	List<WebElement> a=d.findElements(By.tagName("a"));
+	List<WebElement> b = d.findElements(By.tagName("img"));
+	System.out.println("links="+a.size()+" "+"and Images="+b.size());
+	d.findElement(By.linkText("See more")).click();
+	d.findElement(By.id("twotabsearchtextbox")).sendKeys("Play station");
+	d.findElement(By.id("nav-search-submit-button")).click();
+	d.findElement(By.linkText("PlayStation 4 Slim 1TB Console")).click();
+	d.findElement(By.linkText("See All Buying Options")).click();
+	d.findElement(By.name("submit.addToCart")).click();
+}
+}
+
+
+Css selector
+this is customized locater 
+
+
+tag id        input#id
+tag class      input.class
+tag attribute+value  input[attribute='value']
+tag class+attribute  input.classvalue[attribute='value']
+
+
+VERY IMP :
+*************************************************************************************************************************************
+XPATH : XML PATH 
+
+IT IS ADDRESS OF WEB ELEMENT 
+ DOM : DOC OBJECT MODEL GENERATED IN RUN TIME 
+
+using dom only we will create x[ath 
+2 types > absolute xpath / full xpath > Relative xpth /partial xpath
+
+we use relative x path 
+
+small and clean 
+directly jump to node for give attribute and value //*[@attributr='value']-->//* means all nodes like java.util.*
+but in absolute x path we need to mention all nodes /html/header/body/div/div/div[2]/tagname
+developers will move form one div to another div repostioning so it might broke 
+
+but relative xpath will direwctly jump to give attribute 
+
+
+
+two ways to generate relative X path 
+
+automatically by dev tools and selector hub 
+
+or we can create it manually 
+synatax : //tagname[@attribute='value']
+//*[@attribute='value']     ----> if we dont know tag name we can use * means all 
+
+
+if we need to have 2 attribute in relative xpath 
+
+//tagname[@attribute1='value1' and @attribute2='value2']
+
+keep in mind there are menthos for xpath //*[contains(@attribute, 'value)] 
+//*[text()='testelement']
+
+See when we have attribute changing dyna,ically like startr and stop button 
+we can use xpath only
+ by or opereater 
+
+//*[@id='start' or @id='stop']
+//*[contains(@id.'start')]
+
+
+chained xpath= relative xpath +absolute xpath 
+
+//span[@id='value']/a/div
+
+
+Xpath axes 
+Ancester
+parent
+seflf
+child
+desendent
+
+
+//*[@attribute='value']/parent::tag_name 
+
+                       /child :: tagname
+			/following::tagname
+			/descendant::tagname
+                        /preceding::tagname
+
+*************************************************************************************************************************************
+
+IMP webdriver has its own methods just like findElement and get
+
+GET MEthods - works with web page in webdriver class 
+
+get() to get http:// of any browser 
+getTitle() to get title of current web page 
+getCurrentUrl();
+getPageSource(); // every server returns some html+js as a response called pageSource it will return that 
+getWindowHandle(); // retuens session id for each web action 
+*************************************************************************************************************************************
+
+Browser methods 
+
+close()--closes only current page 
+quit()-- closes all windows in browser 
+
+*************************************************************************************************************************************
+conditional methods : works on web element form web element class 
+
+isDisplayed works for all web element to check display status boolean value 
+isEnabled - used for input box check box enabled or not and radio box 
+isSelected -for radio buttons if selected returns true else false 
+
+*************************************************************************************************************************************
+Wait commands / methods 
+to solve sync problem 
+
+ Thread .sleep() is a java method not web driver methodv 
+implicitWait()---> driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+explicitWait()
+NoSuchElementException is due to sync problem 
+
+ElemenNotFound when locaters is wrong '
+
+
+Explicitly wait 
+
+declaration --->WebDriverWait d = new WebDriverWait(driver_object,Duration.ofSeconds(30));
+conditions
+d.until(ExpectedCondition.visibilityOfElementLocated(webelement locator));  // this returns web element 
+WebElement w =d.until(ExpectedCondition.visibilityOfElementLocated(webelement locator));
+w.sendKeys();
+*************************************************************************************************************************************
+Navigational commands or methods 
+
+driver.navigate().to()--------similar to driver.get()___it will navigate to given link 
+
+ it accepts url inn string format and url object 
+ex :
+URL u = new URL("http://www,xtz,com");
+driver.navigate().to(u);
+
+sometimes we get url object through 3 party application 
+ 
+
+
+
+
+driver.navigate().refresh()
+driver.navigate().back()
+driver.navigate().forward()
+*************************************************************************************************************************************
+How to switch between tabs : usually even if selenium  has opened many tabs it will refer only parent 
+
+we can use 
+driver.switchTo().window(window_handle);
+*************************************************************************************************************************************
+
+Handling :
+
+How to handle check boxes 
+
+usign for loops 
+
+collect all check bpx by using comman attribute 
+
+List<WebElement> s= w.findElements(By.xpath("//input[contains(@class,'form-check-input') and @type='checkbox' ]"));
+		for(int i=0;i<s.size();i++) {
+			s.get(i).click();
+			
+		}
+
+if we need to unselect execute same for loop or add condition 
+
+for(int i=5;i<s.size();i++) {
+			if(s.get(i).isSelected()) {
+				s.get(i).click();
+			}
+*************************************************************************************************************************************
+Alerts : basically know as pop ups they are not web elemente so we csnnot locate them 
+ OK alert
+Alert a =driver.switchTO().alert();
+a.getText();
+a.accept();
+this returns alert window then driver will be active on alert window then it will accept it 
+we can store in Alert datatype/ pre defined class Alert  
+
+Confirm alert : which has both ok and cancel in popup 
+
+same way we need to switch my driver to alert page using driver.switchTo().alert().accept()/.dismiss(); 
+if we need to confirm/ ok use accept() else use dismiss()
+
+ Prompt alert :here we need to provide input or prompt , then ok or cancel 
+here will again point driver to alert page using driver.switchTo().alert(); and store it in varable of data type Alert 
+then we can use many methods like sendKeys and getText accept and dismiss 
+
+
+d.findElement(By.id("promptexample")).click();
+		Thread.sleep(2000);
+		Alert c =d.switchTo().alert();	
+		System.out.println(c.getText());
+		c.sendKeys("manage");
+		c.accept()/dismiss();
+
+Extra info ;
+
+we can handle alerts using explicit wait also 
+
+fist decalre it WebDriverWait n = new WebDriverWait(driver,Duration.ofSeconds(20));
+
+n.until(ExpectedConditions.alertIsPresent());
+
+this also return alert page 
+
+Alert c = n.until(ExpectedConditions.alertIsPresent());
+now we can perform methods as above accept getText and all 
+
+authenticated alert : when we go to some application we will get popup saying username and passwaord 
+
+we cannot handle such pop ups using alert or explicit wait 
+but we need open url by injecting user name and pass like http://username:password@URL....
+
+*************************************************************************************************************************************
+
+FRames and IFRAMES 
+
+Web page inside another page 
+first we need to point driver to paticular frame like below 
+driver.switchTo().frame(id/name/findwebElement);//  we need to pass frame one frame is one webelemenr in web page
+
+we cannot switch from frame to frame 
+be need to comback to parent page 
+driver.switchTo().defaultContent();
+
+
+*************************************************************************************************************************************
+ 
+Handling drop down 
+
+select drop down - which has select tag 
+We have pre defimed class Select which accepts value web element later we can use its methods like selectByVisibleText(), selectByValue() and selectByIndex();
+WebElement e =d.findElement(By.id("country"));
+	    Select s = new Select(e);
+	    s.selectByIndex(3);
+
+we have another method s.getOptions(); // returns all web elements which are options 
+List<WebElement> l=s.getOptions();
+use for loop 
+l.get(i).getText();
+
+
+bootstrap drop down: options available in HTML 
+its nothing imp we handle how we handle checkboxs and normally finding elements and filetring out via class and selecting 
+d.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		d.navigate().to("https://www.jquery-az.com/boots/demo.php?ex=63.0_2");
+		d.manage().window().maximize();
+		d.findElement(By.cssSelector("button[title='HTML, CSS']")).click();
+		List<WebElement> l=d.findElements(By.className("checkbox"));
+		for(int i=0;i<l.size();i++) {
+			String m=l.get(i).getText();
+			if(m.equals("Java")||m.equals("HTML")){
+				l.get(i).click();
+			}
+		}
+	
+hidden drop down - we dont have this in HTML , it wont show any options 
+
+
+we need freez our page using debugger from selectorshub : then inspect again we will see drop dowm web elements 
+
+
+Auto suggest drop down or dyanamic dropdowns 
+*****************************************************************************************************************************************
+Handling web table
+
+3 types 
+
+static web table
+dynamic web table 
+table with pagination  
+
+*************************************************************************
+Handling date pickers 
+
+we can handle by normal webelement and sendKeys to date in right formate 03/25/2023
+
+oe we need to use logic 
+  String date="17";
+        String month="September";
+        String year="2000";
+      
+		while(true) {
+			 WebElement r= w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='ui-datepicker-month']")));
+		        String Cmonth=r.getText();
+				String Cyear=d.findElement(By.xpath("//span[@class='ui-datepicker-year']")).getText();
+				
+        	 if(month.equals(Cmonth)&&year.equals(Cyear)) {
+        		 d.findElement(By.xpath("//a[normalize-space()='17']")).click();
+        		 break;
+        	 }
+        	 d.findElement(By.xpath("//span[text()='Prev']")).click();
+        	 
+         }
+	}
+
+
+watched half need more info 
+
+*****************************************************************
+Mouse actions in selenium 
+
+what ever we do in mouse we can do it in code 
+
+we use Action class which contains methods used for mouse actions 
+
+we can do 
+
+Mouse hover -moveToElement(WebElement).moveToElement(WebElement).build().perform();// when we have to hover two elements , and while using action methods we need to build it fiirst and then perform 
+note : calling build method is not compulsory perform will handle both building action and perrforming 
+Actions a = new Actions(d);
+		WebElement w1 = d.findElement(By.xpath("//span[text()='Prime']"));
+		Action a1 =a.moveToElement(w1).build();
+		a1.perform();
+
+double click -
+we have another method in action class a.doubleClick(web_element).build().perform();
+right click -
+in same Actions class we have one method contextClick(web_element);// this right clicks on any web Element
+drag and drop -
+
+we need to collect source and destination / destination to source in webelement 
+
+then we will pass into dragAndDrop(Source, destination).build().perform();
+Note : for slider we have seperate method dragAndDropBy(webelement,x,y);
+d.get("https://demo.automationtesting.in/Slider.html");
+	WebElement w =	d.findElement(By.xpath("//div[@id='slider']/a"));
+		System.out.println( d.findElement(By.xpath("//div[@id='slider']/a")).getLocation());
+		Actions a = new Actions(d);
+		a.dragAndDropBy(w, -40, 282).perform();
+		System.out.println( d.findElement(By.xpath("//div[@id='slider']/a")).getLocation());
+
+
+
+Actions a = new Actions(driver_object);
+
+
+
+Note : getText can get text when it is only inner text like <span>class="nm4jkdl">Copy Text</span>// copy text uis inner text 
+what eveer we enter it will not be in innertext it will be save in attribute called value so we need to get taht artibute
+using getAttribute("attribute_name")
+d.navigate().to("https://www.youtube.com/");
+	   String s =d.getTitle();
+	   System.out.println(s);
+	   System.out.println( d.findElement(By.xpath("//span[text()='Subscriptions']")).getText());
+	   d.findElement(By.xpath("//input[@placeholder='Search']")).sendKeys("SDET QA");
+	   System.out.println( d.findElement(By.xpath("//input[@placeholder='Search']")).getAttribute("value")); 
+
+d.findElement(By.xpath(""))
+
+Keyboard Actions ::
+JavaScript Executor 
+when wvwe we get element not interceble error we can use javascriptexecutor interface 
+
+WebElement m=d.findElement(By.id("80dy8z-mxqge9-ivyhgq-bykoli"));
+			JavascriptExecutor js = (JavascriptExecutor)d;
+			js.executeScript("arguments[0].click()", m);
+		  
+
+to send elements 
+
+JavascriptExecutor js =(JavascriptExecutor) driver_obj;
+js.executeScript("arguments[0].setAttribute('value','T shirts')",web_element);
+
+
+Another advatage for this interface is to scroll bar which is browswr element not web element 
+ 
+
+WebDriver d = new ChromeDriver();
+		d.get("https://testautomationpractice.blogspot.com/");
+		JavascriptExecutor j= (JavascriptExecutor)d;
+		WebElement w=d.findElement(By.id("Wikipedia1_wikipedia-search-input"));
+		j.executeScript("arguments[0].setAttribute('value','Arun')",w);
+		j.executeScript("arguments[0].click()", d.findElement(By.xpath("//input[@type='submit']")));
+		j.executeScript("window.scrollBy(0,1200)","");
+
+j.executeScript("arguments[0].scrollIntoView()",d.findElement(By.xpath("//*[@id=\"HTML12\"]/h2")));
+
+to scroll till particular webElement 
+
+
+
+to zoom our web page
+
+j.executeScript("document.body.style.zoom='"+i+"%'");
+
+
+
+
+SearchContext(I)>extends>WebDriver(I),JavascriptExecutor(I),TakesScreenshots(I)>all three implemented by RemoteWebDriver(c) class
+extends to chromeDriver (c), FirefoxDriver (c), OperaDriver(c) etc
+
+
+int a =10 ;
+long b=398384784l;
+
+long b =a ;<Upcasting> 
+
+int a =b; here we need to downcast they value of b first 
+int a =(int)b;
+
+ 
+TakesScreenshot interface 
+
+brother of javascript executor interface 
+
+here also we need type casting 
+TakesScreenshot t=(TakesScreenshot)w;  // downcasting driver obj to takescreentshot and store it 
+		File f1=t.getScreenshotAs(OutputType.FILE);    //this method is to take screenshot we need to specify output type and return type is file formate 
+		File f2= new File("D:\\arunk\\Saved Pictures\\img1.png");// specifying the location in my local
+		f1.renameTo(f2);                                          // now we need to move that screenshot which is saved somewhere to here using renameTo method 
+		
+Taking scrrenshot of particular section and webelement 
+File f3=We2.getScreenshotAs(OutputType.FILE);
+		File f4=new File("D:\\arunk\\Saved Pictures\\img2.gif");
+		f3.renameTo(f4);
+
+
+
+ChromeOptions :: browser settings 
+
+ChromeOptions c = new ChromeOptions();
+		c.addArguments("--headless=new");
+
+to run scripts in backend 
+advantages :
+faster execurion , multitasking ,
+disadvantages :
+Visibility is zero,
+
+
+
+similarly :
+
+if we want to open or run in incognito mode 
+
+we need set browser to ingonito settings : we do settins in chrome option class 
+
+it is also class between two interface searchContext and webdriver 
+
+ChromeOptions c= new ChromeOptions();
+c.addArguments("--incognito");
+
+now we need to apply the settings 
+
+WebDriver d = new ChromeDriver(c);
+
+Adding extensions using chromeOptions 
+
+: we need to extract CRX file from another extention 
+
+
+CRX is like exe file extensions run on CRX file only 
+
+ChromeOptions c = new ChromeOptions();
+File f= new File("location");
+c.addExtensions(f);
+
+
+this will enable  
+
+How to handle Broken links :
+
+first we need to locate all link elements by tagname a 
+
+then we need take each element and get value of href attribute using getAttribute("href")
+
+now it is stored in string form lets convert to URL form using URL class
+
+then we can openConnection() using URL class 
+
+next is to connect to server this method is available in HttpURLCOnnection class we need to downcaset URL to  HttpURLCOnnection
+now both connect() and getResponseCode() we can call 
+and print links above 400 response code :
+
+refer below code :
+ d.navigate().to("https://testautomationpractice.blogspot.com/");
+
+       List<WebElement> w=d.findElements(By.tagName("a"));
+       
+       for(WebElement link:w) {
+    	   String s=link.getAttribute("href");
+    	   if(s==null || s.isEmpty()) {
+    		   System.out.println("herf attribute is having  empty value");
+    		   continue;
+    	   }
+    	   URL u= new URL(s);
+    	  HttpURLConnection h = (HttpURLConnection) u.openConnection();
+    	  h.connect();
+    	  if(h.getResponseCode()>399) {
+    		  System.out.println("Broken link :  "+s);
+    	  }
+    	   
+       }
+
+
+Shadow DOM :
+
+each DOM will have sub DOM under it like 
+Shadow DOM > Shadow host >Shadow root>webelements 
+
+only cssselctors can access these elements 
+
+first we need to find shadow host then we can use getShadowRoot(); returb type is searchContext type 
+   WebDriver driver = new ChromeDriver(a);
+       driver.get("https://practice.expandtesting.com/shadowdom");
+     //This Element is inside single shadow DOM.
+       
+     SearchContext s = driver.findElement(By.cssSelector("div#shadow-host")).getShadowRoot();
+     String S =s.findElement(By.cssSelector("#my-btn")).getText();
+      System.out.println(S);
+    
+
+
+Handling SVG elements :(ICONS)
+
+
+
+Handling excels using APache POI
+
+So java selenium is made to interact with web application not with excel 
+but we can integrate excel libraries by adding apache POI POM dependency in maven in our selenium project 
+
+we can open file in two methods 
+reading > FileInputStream 
+Writing > FileOutputStream
+
+after opening fist we need to open workbook then sheet then row them cells in each row 
+
+	FileInputStream f = new FileInputStream("D:\\workspace\\Arun\\TestData\\Book.xlsx");
+		XSSFWorkbook wb=new XSSFWorkbook(f);
+		XSSFSheet sh=wb.getSheet("Sheet1");
+		 for(int i=0;i<=8;i++) {
+			 
+			 for(int j=0;j<2;j++) {
+				 String res=sh.getRow(i).getCell(j).toString();
+				 System.out.println(res);
+			 }
+		 }
+
+Writing :
+
+setCellValue(Anydata type);
+creatRow()
+createCell();
+createSheet();
+
+Data driven testing using properties : very simple than excel 
+
+here we can have properties to config some application so it will be in key value format 
+like 
+appurl=https://testautomationpractice.blogspot.com/
+username=arun
+email=xyz@gmail.com
+phone=12345777658387
+
+
+
+<MOST IMPORTANT> TEST NG 
+
+TEST NG : test new generation 
+Unit testing tool
+
+advantages :
+test cases design > group of TC's execution , prioritizaion(we can give priority to each case)>parameterization(uploading test data and browser details)>parallel testing in each browser
+report generation 
+
+we can have test NG librabry by 2 methods 
+1.plugin in eclips marketplace
+2.add dependency in POM XML
+
+
+
+Annotatios : @Test
+Insted of main metjod we can add this , for now on will write script in testng style 
+
+we will add before everymethod in main class
+class Main{
+@Test(priority=1)
+void brun() {
+	System.out.println("running....");
+	}
+@Test	
+void astop()throws Exception {
+	System.out.println("stoping..");
+}
+	
+	  
+	}
+
+priority=1 signifies it should execute first 
+
+ we can have -ve numbers 
+
+also we can have no priority but that will consider as priority =0 
+
+withou annotations Testng wont execute methods 
+@Test(priority=1)
+void run() {
+	System.out.println("running....");
+	}
+@Test(priority=100)
+void stop()throws Exception {
+	System.out.println("stoping..");
+}
+@Test(priority=3)
+void restart() {
+	System.out.println("restarting.....");
+}
+@Test(priority=2)
+void refresh() {
+	System.out.println("refreshing----");
+}
+	
+	  
+	}
+
+TestNG heart is XML 
+
+beacuse we can convert class into xml 
+insude xml we have class tag under classes tag there we can add out 2 class and run at a time 
+
+Annotaions : controls sequence of running auto mattion scripts 
+1.@Test
+2.@AfterMethod and @BeforeMethod
+3.@AfterTest and @BeforeTest
+4.@AfterClass 
+5.@AfterSuite
+
+Assertions are the builtin class in testng used for conditional state,ments 
+
+if we use if else it will pass the test even if else is failed because test is completed 
+we can handle this using Assertions 
+
+Hard Assertion static methods from Assert.assertEquals(),Assert.assertTrue(True)
+soft Assertion not sttic we need create object every time and then same method as hard assertion 
+hard assert stops execution if failed 
+soft doesnt stop 
+for soft assertion we need use obj.assertAll(); at end to activate 
+
+
+new just like priority in Annotations 
+
+we can aslo use dependOnMethods={"method_name"}  we can mention on any annotations method : if dependent method is failed it skips other execution 
+
+void openApp(){}  if this passed 
+@Test(dependsOnMethods={"openApp"}) this execute else skips all dependent task 
+void findElemenent(){}
+
+
+
+Grouping 
+
+another feature on Annotations 
+@Test(groups={"sanity"}) //only sanity will be executed using testNG XML
+@Test(groups={"regression"
+,"sanity"})
+
+in XML 
+we need to add some extra xml tag 
+<groups>
+<run>
+<include name="group_name"/>
+<execlude name="regression"/>
+</run>
+</groups>
+
+Parameterization (TestNG): Mainly for parallel testing 
+
+Dataproviders :always returns 2d array 
+
+we will do DDT data driven testing usding excel apache poi and alos using notpad properties 
+these things we can use another annotation callede DataProvider
+
+@DataProvider(name=-"dp1")
+
+void data(){
+}
+if we need to use it in any method 
+@Test(dataProvider="dp")
+void method1(String name,String pass){}
+
+Example :
+
+@DataProvider (name="dp")
+Object[][] data(){
+	Object logindata[][]= {{"arun","pass1"},
+			               {"ashu","Pass2"},
+			               {"Raj","Pass3"}
+			             
+			
+	};
+	  return logindata;
+}
+@Test(priority=1,dataProvider="dp")
+void login(String name,String pass) {
+	
+	d.findElement(By.xpath("//a[title=\"My Account\"]")).click();
+	Actions a = new Actions(d);
+	
+	
+	
+	WebElement w= wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("Login")));
+		a.moveToElement(w).click().perform();	
+	d.findElement(By.xpath("//input[@id='input-email']")).sendKeys(name);
+	d.findElement(By.xpath("//input[@id='input-password']")).sendKeys(pass);
+    d.findElement(By.xpath("//input[@value='Login']")).click();	
+	
+
+}
+
+
+Parallel testing : run same TC in two different browsers also cross browsing tseting 
+
+
+so using XML only we will do parallel testing 
+
+
+first 
+ 
+ in xml 
+ 
+ we have to specify parameter tag above class of test 
+ 
+ <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+ <parameter name="Browsers" value="edge"></parameter>
+    <classes>
+      <class name="js.Test3"/>
+      
+      
+    </classes>
+  </test> <!-- Test -->
+   <test thread-count="5" name="Test2">
+ <parameter name="Browsers" value="chrome"></parameter>
+    <classes>
+      <class name="js.Test3"/>
+      
+      
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+then in automation class method 
+above openApp method we need to specify 
+@Parameters({"Browsers"})
+void openApp(String br){
+switch(br){
+case "chrome":
+d= new ChromeDriver();break;
+d= new EdgeDriver();break;
+}
+}
+
+
+we have another attribute in suite tag : paralle="tests"
+
+in xml 
+<suite>
+name="suite1"  parallel="tests"</suite>
+
+
+
+Listeners :
+
+Listner is a class which implements certain methods of ITestListner interface 
+
+so when test case failed we need to take screen shot 
+when test cases is passed we need generate reeport and success message : that will be done by listeners 
+

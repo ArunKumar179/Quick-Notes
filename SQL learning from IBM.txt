@@ -1,0 +1,165 @@
+SQL structured query language 
+
+Data - is form of facts like image , txt, jar , or anything 
+Database : which acts as repository of data or collection of data which allows user to save , add and update data 
+2 types : DBMS and RDBMS
+RDBMS : relational database management system > MySQL, DB EXpress c and also oracle 
+Data are inter related alos in TABULAR FORM
+
+Basic commands > Create table[ddl] , select[drl], insert[dml] ,update[dml] and delete[dml]  
+
+Info models / data models in SQL 
+
+Information models are conceptual model which stores info about data like name , properties and relationalships 
+Hirarchieal model : parent > child like : Renuka parent child me and arvind 
+Data Model :
+Entity relationship Model  :
+Data related to each other 
+Laptop is entity and RAM , HDD, SSD , battery are attributes related to entity 
+so now laptop is a table and RAM SSD HDD all are entities 
+
+SO each entity is nothing but table 
+Entites = table 
+Attribute=Column 
+
+Usually they use Entity relationship diagram to create SQL Database it looks like flowchart 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ER Relational model Concepts [1970] :simple mathematical terms like relation and set [collection of related data elements ]
+relation has 2 types > relation schemas[DataType of attribute] and relation instance [group of data]
+
+Concept 2 :
+Referemcing when one entity is refering another entitiy 
+Ex: Tata table refers to Tata ev table
+
+Primary key and foreign key 
+Primary key : this refers attribute data uniquiely ex sl_no this cant be same it will be different 
+Foreign key :will have same attribute of some other table and that arrti bute should be primary key 
+EX: Tata (id[PK], name , mileage )
+Entity 2 : Tata EV(id[FK], id_EV, name , mileage )
+
+Parent table and Dependent table 
+Parent table : table with primary key 
+DEPENDENT table : table with foreign keys refering primary key table 
+
+Concept 3:
+Relational model constriants/rules followed by busineer : we have 6 rules 
+Entity integrity constriant : an entity should have one arrtibute with primary key to define unique values 
+this avoids duplicate values 
+
+Referencing integrity constriants : this is to refer other entity by foreign key properly 
+
+Sematic intergrity constriant : giving correct value to attribute rather than garbage value EX TATA(id[PK](1), name(Punch),mileage(kl<incorrect/garbage value>))
+
+
+Primary Keys
+If a relation schema has more than one key, then each key is called a candidate key.One of the candidate keys is designated as the primary key, and the others are called secondary keys.
+
+In a practical relational database, each relation schema must have a primary key.
+
+Rules for primary keys:
+The value of the Primary Key must be unique for each instance of the entity.
+
+There can be no missing values( ie. Not Null) for Primary Keys. If the Primary Key is composed of multiple attributes, each of those attributes must have a value for each instance.
+The Primary Key is immutable.i.e., once created the value of the Primary Key cannot be changed.
+If the Primary Key consists of multiple attributes, none of these values can be updated.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DDL and DML 
+
+Data definbation lanaguage used to define entiries like create , drop , and alter , truncate (delets table data but not table )
+
+Data manupulation language : used to modify arrtibute data --insert , update and delete 
+
+CRUD Operations : create , read , update and delete operations 
+
+1. CREATE TABLE 
+
+create table TATA(
+  id int[2] primary key not null,
+  name varchar[15] not null
+);
+
+2.Insert values 
+insert into table_name(attribute_1,attribute_2) values (1,2);
+
+
+
+3.select : for reading data from RDBMS also for data retrival 
+select attrivute_name from Entity_Name -Query 
+select * from TATA where [mileage =12.3] --here where is a filter clause and milege =12.3 is predicate which returns boolean value 
+and ouput is called result set 
+
+4.Update and delete DML 
+
+update table_name set column_name = value where condition/predicate 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+String patterns , Ranges , sets 
+
+String patterns : [like]
+select item as system_part from Orders where item like 'S%' order by amount asc
+
+like is used to search any string in database 
+% means anything after that pattern 
+
+Ranges :[between]
+
+select item from Orders where amount > 500 and amount <1000 //predicate we describe range 
+
+ we can aslo write like this 
+select item from Orders where amount between 100 and 500
+
+Sets :[in]
+
+select * from table where columnValue in (200,5000,300)
+we can select multiple values based on mu;tiple column values 
+
+Order by :
+
+this is used to return sorted Values asc or desc 
+
+by default it will be in asc form 
+select item from Orders order by amount
+select item from Orders order by amount desc
+
+
+we can also sort using column sequence number 
+select item , amount from Orders order by 2 desc
+in above query we have reading 2 attributes so we can sort by thses column no 1 or 2 
+in result set it will sort desc by 2nd column ie amount 
+
+Group by : VVIMP 
+
+we might have many duplicate data , that can be grouped using group by clause and we can aslo retrive specific data by using  having clause similar to where clause 
+but used only in group by '
+
+
+Ex :
+
+select age,count(age) from  table group by age having age=23
+count is method in SQL used to count no of values in column/attribute 
+distinct is also method to read values without duplicates 
+ex: select distinct(country) from table 
+this returns all unique values in column without any duplicates
+
+-0--------------------------------------------------------------------------------------------------------------------------------------------------------
+Playing with multiple tbles using joins 
+
+Join is an opreator 
+used in query to retrive data from muliple attrbuites from diffrernt entities 
+Joins
+table1.attribute1[PK]=table2.attribute1[FK]
+
+two types :
+inner join : retives row from two different table with the help of PK and FK
+ex : 
+select c.first_name ,s.status,o.amount,o.item,count(s.status) from Customers c inner join Shippings s on
+c.customer_id=s.customer
+inner join Orders o on s.customer=o.order_id group by status having status like 'P%'
+
+outer join : full outer join , left outer join and reight outer join 
+
+we will use where clause to filter 
