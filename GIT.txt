@@ -1,0 +1,305 @@
+GIT and GIT HUB :
+
+
+1. Version control system 
+
+dev1-----feature v1 
+
+dev2 ----feature v2
+
+dev3 ---feature  v3 
+
+we can get all version seperetely , also retrives dev details what chnage they made 
+----------------------------------------------------------------------------------------------------------------
+2 types : Centralized version control system and distrubuted version control 
+
+Centralized version conrtrol system (SVN-appache sub version)-OLD
+
+1.multiple devs commit and checkout working code from local machine to one centralized server 
+
+dev1 > worcking code -----> server 
+dev2 > working code------->same server 
+
+disadvantages :
+
+server canf take that much load when dev and project is more 
+network is more every time we need to commit and check out 
+
+---------------------------------------------------------------------------------
+Distrubuted version control system :{GIT} 
+
+Multiple devlopers commit and checkout code to local repository (Each developer is assigned with one repository) then final code will be push / pull to remote repository(GIT hub)
+
+GIT-dev1 - local repository --remote repository 
+
+GIT-dev2--local repository --- same remote repository
+
+---------------------------------------------------------------------------------------
+
+GIT Architecture :
+ 
+ 
+ Working directory (workspace containing untracked data {local folder in PC where code will store })> stagging(virtual space in local machine) (tracked data)> local repositoey > remote repository(GIT HUB) 
+                                                                                                    add                       					commit             push 
+																																				checkout			 pull
+																																				
+																																				
+if we need to pull everything from remote repository to local repositiory will use clone command 
+ 
+Add : add untracked data from working dir to stagging 
+Commit:from stagging to local repository
+push:from local repo to remote repo
+pull: from remote repo to local repo 
+clone: to clone local repo to remote repo 
+
+-----------------------------------------------------------------------------------------------------------------
+																															
+lets play with linux command 
+
+pwd : gives current directory 
+ls: list all files in current dir
+clear : clears prompt 
+df -h : disk free - human readable 
+vim text.txt : this will open an editor in vim > we can add keywords and in insert mode (i) then esc to come out of vim :wq
+cat text.txt : this will displace file content 
+touch text_name : this will create empty files of given format 
+
+--------------------------------------------------------------------------------------------------------------------
+basic GIT comands :
+
+git init : creates local repo in current dir
+ 
+git add -a 
+git add *.txt 
+git add a.txt b.txt c.txt 
+adds all files to stagging phase all these are untracked files 
+
+git commit -m "comments"
+this will commmit our code from stagging to local repo 
+
+git status : 
+shows status of current dir files 
+
+git log :
+to show logs with comment and co relation id 
+
+
+ if we need to mod files we can mod manually and commit 
+ git commit -a -m "2nd time changes"
+ 
+ if we see . infornt of file in cmd then it is hidden file 
+ 
+ 
+ ----------------------------------------------------------------------------------------------------
+ why we need to stagging area :
+ 
+ some time dev modifies all java files but need to commit only 3 on them then we can add 3 files to stagging area then we commit same 
+ 
+ ---------------------------------------------------------------------------------------------------------
+ Comparing command (git diff )
+ 
+ 
+This command used to compare files and content from stagging area to working directoey
+git diff *.txt
+for this file in stagging area is diffrent and then in working direcetory same file is modified 
+
+now we need to compare  
+ 
+ diff --git a/a.txt b/a.txt
+index ed585b0..3a5686b 100644(100-fike type(txt),644(permission given to file )) 2 W and 4 R : 4+2 :6 RW
+--- a/a.txt
++++ b/a.txt
+@@ -1 +1,2 @@
+-Arun kumar B
++Arun kumar B
++Ashwini B
+
+
+
+----a/a.txt : source file > stagging area tracked file >--- meams some missing lines 
+++++b/b.txt : distination file > working directpry file>+++ mean some extra lines is added 
+if we have empty space : it is unchanged 
+
+
+Now we need diffrence between working dir to latest commit 
+
+latest commit means HEAD in GIT 
+
+so 
+git diff HEAD *.txt
+
+Now we need to compare staging area and latest commit 
+ 
+ git diff --staged head filename.txt
+ 
+git log --oneline 
+this gives all commit id in oneline which we can copy 
+ 
+ WD and Latewst commit 
+ git diff head a.txt
+ WD and staged area 
+ git diff a.txt
+ staged and commit 
+ git diff --staged head a.txt
+  Comit to commit 
+  git diff commitid commitid filename.txt
+  
+  Staged area to particular commit 
+  git diff --staged commitid a.txt
+  -----------------------------------------------------------------------------------------------------------------------------------
+  git remove command (rm)
+  
+  removing files from working dir and staging area 
+  
+  commands to list files in wD and staging area/ cached area 
+  
+ ls will give all files in wD
+ git ls-files : gives all files in staging area 
+ 
+ remove comands 
+ 
+ to remove from both WD and staging area : git rm a.txt
+ to remove only from staging area : git rm --cached a.txt
+ to remove only from working directory : rm a.txt
+ -------------------------------------------------------------------------------------------------------------------------------------
+ 
+ git checkout command (Opposite to commit)
+
+this command used only in undoing working  dir changes 
+ex : we have one untracked file in WD then added to staging area then commited it to local repository then again modified WD file which is untracked data 
+to discard those changes we use checkout command 
+
+git checkout -- filename.txt   
+  
+  
+--------------------------------------------------------------------------------
+
+RESET command 
+
+undo stagging area files 
+undo local repository changes 
+
+command :
+git reset <mode> <commit id>(above commits will be discarded )
+we have 3 miodes: mixed (default), soft , hard 
+
+mixed : both commmit and file in stagging  area are gone 
+soft : on;ly commit is gone but not staging area and working dir 
+hard : changes discarded everywhere in WD staging area 
+
+----------------------------------------------------------------------------------
+___VIMP __
+GIT Branching :
+'
+Multiple devs can create there own branches called feature brached later merged to main master branch 
+
+master branch commit 1 > commit 2> commit 3
+      dev 1 feature branch 1                >commit 1>commit 2 
+
+
+to view available branches : git branch 
+
+
+ti create new branch : git branch branch_name	  
+
+to switch to newly created branch : git checkout banch_name 
+
+branch commit wont affect master branch but it will inherit master branch features 
+Each branch is independent to one another 
+----------------------------------------------------------------------------
+Merging :
+
+Fast forward merge: when there is no commits {when master branch is not touched}
+
+THree way merge [most popular]: when changes are done in both master and feature branch due to parallel implementation 
+
+so this will create merge commit [all in one]
+ command :
+ 
+ git merge feature_branchname
+ ----------------------------------------------------------------------------------------------------
+ REbase : similar to merging 
+ 
+ we face merge conflits in three way merging 
+ 
+ MCi MC2  --MC3  merge conflits 
+        FC1 FC2
+ to avoid above will use rebase in rebase we dont have any history 
+ 
+ first will use MC3 to rebase using command git rebase 
+ 
+ then will merge feature branch to rebased master branch git merge 
+ 
+ 2 steps :
+1. in feature branch
+ rebase : git rebase master
+
+2.in master branch we need to merge rebased fB 
+git merge FB 
+
+  Demo : 
+  arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (master)
+$ git log --oneline
+0945d53 (HEAD -> master) MC3
+280c9f9 MC2
+5095d08 MC1
+
+arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (master)
+$ git log --oneline FB
+74bee81 (FB) FBC2
+e8da0c3 FBC1
+280c9f9 MC2
+5095d08 MC1
+
+arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (master)
+$ git branch
+  FB
+* master
+
+arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (master)
+$ git checkout FB
+Switched to branch 'FB'
+
+arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (FB)
+$ git rebase master
+Successfully rebased and updated refs/heads/FB.
+
+arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (FB)
+$ git log --oneline --graph
+* 1890257 (HEAD -> FB) FBC2
+* 4210f96 FBC1
+* 0945d53 (master) MC3
+* 280c9f9 MC2
+* 5095d08 MC1
+
+arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (FB)
+$ git checkout master
+Switched to branch 'master'
+
+arunk@DESKTOP-H3IVF82 MINGW64 /d/Users/Arun/GIT rebase (master)
+$ git merge FB
+Updating 0945d53..1890257
+Fast-forward
+ c.txt | 0
+ d.txt | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 c.txt
+ create mode 100644 d.txt
+--------------------------------------------------------------------------------------------------------------------------------------------
+GIT HUB :
+
+Remote repository :
+
+host for local repository  which can be shared to team 
+
+baic commands :
+
+clone : to clone remote repo in local repo
+
+Push : to push code to remote repo from local repo  
+
+Pull :to pull code from remote repo to local repo 
+
+
+
+
